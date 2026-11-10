@@ -1,6 +1,9 @@
 *.log
 .DS_Store
 .env
+.env.*
+!.env.example
+!.env.*.example
 .env.backup
 .env.production
 .phpactor.json
@@ -14,6 +17,8 @@
 /.zed
 /auth.json
 /node_modules
+/docker-compose.override.yml
+/compose.override.yaml
 /public/build
 /public/fonts-manifest.dev.json
 /public/hot
