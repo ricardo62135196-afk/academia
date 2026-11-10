@@ -1,0 +1,39 @@
+services:
+  laravel:
+    build: .
+    ports:
+      - "8888:80"
+    volumes:
+      - ./:/var/www/html
+      - vendor:/var/www/html/vendor
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: academia
+      DB_USERNAME: academia
+      DB_PASSWORD: ${MYSQL_PASSWORD:-academia_local}
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: academia
+      MYSQL_USER: academia
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-academia_local}
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "academia", "--password=${MYSQL_PASSWORD:-academia_local}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  mysql_data:
+  vendor:

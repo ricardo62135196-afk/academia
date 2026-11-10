@@ -1,0 +1,107 @@
+[
+    {
+        "id": 1,
+        "nome": "Carlos Silva",
+        "cpf": "526.018.159-06",
+        "modalidade": "Musculação",
+        "especialidades": [
+            "Hipertrofia",
+            "Treino de força",
+            "Reabilitação pós-lesão"
+        ],
+        "biografia": "Carlos acompanha alunos de musculação há mais de doze anos. Começou como estagiário em uma academia de bairro e hoje monta treinos individualizados, do iniciante ao atleta amador. Gosta de explicar o porquê de cada exercício para que o aluno aprenda a treinar sozinho.",
+        "horario_trabalho": "Segunda a sexta, 06:00 às 14:00",
+        "foto": "img/professores/professor2.avif",
+        "ativo": true
+    },
+    {
+        "id": 2,
+        "nome": "Fernando Lima",
+        "cpf": "083.016.613-05",
+        "modalidade": "Musculação",
+        "especialidades": [
+            "Emagrecimento",
+            "Musculação para iniciantes",
+            "Treino para idosos"
+        ],
+        "biografia": "Fernando é especialista em receber quem nunca pisou numa academia. Seu foco é criar rotina, perder o medo das máquinas e evoluir com segurança. Atende também o público da melhor idade, com treinos de equilíbrio e força funcional.",
+        "horario_trabalho": "Segunda a sexta, 14:00 às 22:00",
+        "foto": "img/professores/professor1.jpg",
+        "ativo": true
+    },
+    {
+        "id": 4,
+        "nome": "Juliana Rocha",
+        "cpf": "996.030.824-30",
+        "modalidade": "Pilates",
+        "especialidades": [
+            "Pilates com aparelhos",
+            "Flexibilidade",
+            "Mobilidade articular"
+        ],
+        "biografia": "Juliana descobriu o Pilates durante a recuperação de uma lesão no joelho e transformou a experiência em profissão. Usa os aparelhos do estúdio para trabalhar mobilidade, alongamento e consciência corporal, sempre respeitando o ritmo de cada aluno.",
+        "horario_trabalho": "Segunda, quarta e sexta, 13:00 às 21:00",
+        "foto": "img/professores/professora1.png",
+        "ativo": true
+    },
+    {
+        "id": 5,
+        "nome": "Mariana Costa",
+        "cpf": "628.194.821-12",
+        "modalidade": "Funcional",
+        "especialidades": [
+            "Treino funcional",
+            "Circuitos de alta intensidade",
+            "Condicionamento"
+        ],
+        "biografia": "Mariana comanda as turmas de funcional do fim da tarde, com circuitos dinâmicos que juntam força, agilidade e cardio. Já foi atleta de corrida de rua e traz esse gosto por desafio para as aulas, sempre com opções mais leves ou mais intensas.",
+        "horario_trabalho": "Segunda a sexta, 16:00 às 21:00",
+        "foto": "img/professores/professora2.png",
+        "ativo": true
+    },
+    {
+        "id": 6,
+        "nome": "Bruna Almeida",
+        "cpf": "993.518.190-19",
+        "modalidade": "Funcional",
+        "especialidades": [
+            "Funcional matinal",
+            "Mobilidade",
+            "Preparação para corrida"
+        ],
+        "biografia": "Bruna cuida das turmas das seis da manhã e adora quem aproveita o início do dia para treinar. Combina exercícios de mobilidade, core e força com a preparação para provas de corrida, do primeiro quilômetro à meia maratona.",
+        "horario_trabalho": "Segunda a sexta, 06:00 às 12:00",
+        "foto": "img/professores/padrao.svg",
+        "ativo": true
+    },
+    {
+        "id": 7,
+        "nome": "Paula Souza",
+        "cpf": "937.865.797-41",
+        "modalidade": "Spinning",
+        "especialidades": [
+            "Spinning",
+            "Resistência cardiovascular",
+            "Treino intervalado"
+        ],
+        "biografia": "Paula é a responsável pelas aulas de Spinning e dá o ritmo da sala com playlists animadas e muita motivação. Trabalha com treinos intervalados e de resistência, adaptando a carga para quem está começando ou para quem já pedala há anos.",
+        "horario_trabalho": "Terça a sábado, 08:00 às 14:00",
+        "foto": "img/professores/professora4.png",
+        "ativo": true
+    },
+    {
+        "id": 8,
+        "nome": "Patrícia Mendes",
+        "cpf": "543.231.948-97",
+        "modalidade": "Spinning",
+        "especialidades": [
+            "Spinning",
+            "Queima calórica",
+            "Ciclismo indoor"
+        ],
+        "biografia": "Patrícia assumiu as turmas de Spinning do fim do dia e é conhecida pelas aulas temáticas, como subidas de montanha e sprints. Gosta de acompanhar a evolução de cada aluno e de comemorar cada meta batida, da primeira aula completa ao desafio mensal.",
+        "horario_trabalho": "Segunda a sexta, 17:00 às 21:00",
+        "foto": "img/professores/professora5.png",
+        "ativo": true
+    }
+]
