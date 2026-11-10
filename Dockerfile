@@ -2,11 +2,12 @@ FROM php:8.4-apache
 
 WORKDIR /var/www/html
 
-RUN apt-get update && apt-get install -y --no-install-recommends git unzip \
+RUN apt-get update && apt-get install -y --no-install-recommends git unzip libicu-dev \
     && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-install pdo
 RUN docker-php-ext-install pdo_mysql
+RUN docker-php-ext-install intl
 
 RUN a2enmod rewrite
 
