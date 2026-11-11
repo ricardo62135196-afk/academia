@@ -20,6 +20,7 @@
                 <tr>
                     <th scope="col">Foto</th>
                     <th scope="col">Nome</th>
+                    <th scope="col">Profissão</th>
                     <th scope="col">Modalidade</th>
                     <th scope="col">Horário de trabalho</th>
                     <th scope="col">Status</th>
@@ -29,8 +30,9 @@
             <tbody>
                 @foreach ($professores as $professor)
                     <tr>
-                        <td><img class="miniatura" src="{{ asset($professor['foto']) }}" alt="Foto de {{ $professor['nome'] }}" width="56" height="56" loading="lazy"></td>
+                        <td><img class="miniatura" src="{{ $professor->foto_url }}" alt="Foto de {{ $professor['nome'] }}" width="56" height="56" loading="lazy"></td>
                         <td><strong>{{ $professor['nome'] }}</strong></td>
+                        <td>{{ $professor['profissao'] ?: '-' }}</td>
                         <td>{{ $professor['modalidade'] }}</td>
                         <td>{{ $professor['horario_trabalho'] }}</td>
                         <td>

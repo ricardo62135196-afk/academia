@@ -5,7 +5,7 @@
     $editando = $professor !== null;
     $especialidades = old('especialidades', $professor['especialidades'] ?? []);
     $especialidades = is_array($especialidades) ? implode("\n", $especialidades) : $especialidades;
-    $fotoAtual = $professor['foto'] ?? config('academia.foto_padrao');
+    $fotoAtual = $professor?->foto_url ?? asset(config('academia.foto_padrao'));
 @endphp
 
 <a class="voltar" href="{{ route('admin.professores.index') }}">&larr; Voltar para a lista</a>
@@ -30,7 +30,7 @@
         @endif
 
         <div class="foto-campo">
-            <img id="previa-foto" src="{{ asset($fotoAtual) }}" alt="Foto do professor" width="140" height="140">
+            <img id="previa-foto" src="{{ $fotoAtual }}" alt="Foto do professor" width="140" height="140">
             <div>
                 <label for="foto">Foto do professor</label>
                 <input type="file" name="foto" id="foto" accept="image/jpeg,image/png,image/webp">
@@ -46,8 +46,25 @@
         </div>
 
         <label for="nome">Nome</label>
-        <input type="text" name="nome" id="nome" value="{{ old('nome', $professor['nome'] ?? '') }}" maxlength="100" required>
+        <input type="text" name="nome" id="nome" value="{{ old('nome', $professor['nome'] ?? '') }}" maxlength="255" required>
         @error('nome')<p class="erro-campo">{{ $message }}</p>@enderror
+
+        <label for="profissao">Profissão</label>
+        <input type="text" name="profissao" id="profissao" value="{{ old('profissao', $professor['profissao'] ?? '') }}" maxlength="255">
+        @error('profissao')<p class="erro-campo">{{ $message }}</p>@enderror
+
+        <div class="duas-colunas">
+            <div>
+                <label for="email">E-mail</label>
+                <input type="email" name="email" id="email" value="{{ old('email', $professor['email'] ?? '') }}" maxlength="255" autocomplete="email">
+                @error('email')<p class="erro-campo">{{ $message }}</p>@enderror
+            </div>
+            <div>
+                <label for="telefone">Telefone</label>
+                <input type="tel" name="telefone" id="telefone" value="{{ old('telefone', $professor['telefone'] ?? '') }}" maxlength="255" autocomplete="tel">
+                @error('telefone')<p class="erro-campo">{{ $message }}</p>@enderror
+            </div>
+        </div>
 
         <div class="duas-colunas">
             <div>

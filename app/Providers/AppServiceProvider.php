@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Support\ProfessorRepository;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -12,10 +11,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(
-            ProfessorRepository::class,
-            fn (): ProfessorRepository => new ProfessorRepository(config('academia.professores_arquivo')),
-        );
     }
 
     /**

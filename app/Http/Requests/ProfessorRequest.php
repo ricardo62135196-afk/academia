@@ -3,8 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Rules\Cpf;
-use App\Support\ProfessorRepository;
-use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -19,6 +17,9 @@ class ProfessorRequest extends FormRequest
     {
         $this->merge([
             'nome' => trim((string) $this->input('nome')),
+            'profissao' => trim((string) $this->input('profissao')),
+            'email' => trim((string) $this->input('email')),
+            'telefone' => trim((string) $this->input('telefone')),
             'cpf' => $this->formatarCpf((string) $this->input('cpf')),
             'especialidades' => $this->normalizarEspecialidades($this->input('especialidades')),
             'horario_trabalho' => trim((string) $this->input('horario_trabalho')),
@@ -36,8 +37,11 @@ class ProfessorRequest extends FormRequest
         $idAtual = (int) $this->route('id');
 
         return [
-            'nome' => ['required', 'string', 'min:3', 'max:100'],
-            'cpf' => ['bail', 'required', new Cpf, $this->cpfDeveSerUnico($idAtual)],
+            'nome' => ['required', 'string', 'min:3', 'max:255'],
+            'profissao' => ['nullable', 'string', 'max:255'],
+            'email' => ['nullable', 'email', 'max:255'],
+            'telefone' => ['nullable', 'string', 'max:255'],
+            'cpf' => ['bail', 'required', new Cpf, Rule::unique('professores', 'cpf')->ignore($idAtual)],
             'modalidade' => ['required', Rule::in(config('academia.modalidades'))],
             'especialidades' => ['required', 'array', 'min:1', 'max:6'],
             'especialidades.*' => ['string', 'max:40'],
@@ -57,7 +61,8 @@ class ProfessorRequest extends FormRequest
         return [
             'nome.required' => 'Informe o nome do professor.',
             'nome.min' => 'O nome deve ter pelo menos 3 caracteres.',
-            'nome.max' => 'O nome pode ter no máximo 100 caracteres.',
+            'nome.max' => 'O nome pode ter no máximo 255 caracteres.',
+            'cpf.unique' => 'Já existe um professor cadastrado com este CPF.',
             'cpf.required' => 'Informe o CPF do professor.',
             'modalidade.required' => 'Escolha a modalidade do professor.',
             'modalidade.in' => 'Escolha uma das modalidades da lista.',
@@ -75,17 +80,6 @@ class ProfessorRequest extends FormRequest
             'foto.max' => 'A foto pode ter no máximo 2 MB.',
             'foto.uploaded' => 'Não foi possível enviar a foto. Ela pode ter mais de 2 MB.',
         ];
-    }
-
-    private function cpfDeveSerUnico(int $idAtual): Closure
-    {
-        return function (string $atributo, mixed $valor, Closure $falhar) use ($idAtual): void {
-            $existente = app(ProfessorRepository::class)->findByCpf((string) $valor);
-
-            if ($existente !== null && $existente['id'] !== $idAtual) {
-                $falhar('Já existe um professor cadastrado com este CPF.');
-            }
-        };
     }
 
     private function formatarCpf(string $valor): string

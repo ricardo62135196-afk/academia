@@ -40,6 +40,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         const nome = document.createElement('h1');
         nome.textContent = p.nome;
 
+        if (p.profissao) {
+            const profissao = document.createElement('p');
+            profissao.className = 'destaque';
+            profissao.textContent = p.profissao;
+            info.append(etiqueta, nome, profissao);
+        } else {
+            info.append(etiqueta, nome);
+        }
+
         const tituloEsp = document.createElement('h2');
         tituloEsp.className = 'perfil-sub';
         tituloEsp.textContent = 'Especialidades';
@@ -72,7 +81,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         agendar.textContent = 'Agendar uma aula';
         acoes.appendChild(agendar);
 
-        info.append(etiqueta, nome, tituloEsp, chips, tituloBio, bio, tituloHor, horario, acoes);
+        info.append(tituloEsp, chips, tituloBio, bio, tituloHor, horario, acoes);
         perfil.append(foto, info);
     } catch (erro) {
         perfil.textContent = 'Não foi possível carregar o professor.';

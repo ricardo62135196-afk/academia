@@ -59,6 +59,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             const nome = document.createElement('h2');
             nome.textContent = p.nome;
 
+            const profissao = document.createElement('p');
+            profissao.className = 'destaque';
+            profissao.textContent = p.profissao || p.modalidade;
+
             const chips = document.createElement('ul');
             chips.className = 'chips';
             p.especialidades.forEach(e => {
@@ -76,7 +80,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             ver.href = link.href;
             ver.textContent = 'Ver perfil';
 
-            corpo.append(etiqueta, nome, chips, bio, ver);
+            corpo.append(etiqueta, nome, profissao, chips, bio, ver);
             card.append(link, corpo);
             lista.appendChild(card);
         });

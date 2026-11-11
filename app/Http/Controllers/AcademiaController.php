@@ -1,7 +1,9 @@
 <?php
  
 namespace App\Http\Controllers;
- 
+
+use App\Models\Professor;
+
 class AcademiaController extends Controller
 {
     private function listaModalidades(): array
@@ -138,15 +140,21 @@ class AcademiaController extends Controller
    
 private function professoresAtivos(): array
 {
-    $todos = app(\App\Support\ProfessorRepository::class)->all();
-    $ativos = array_values(array_filter($todos, fn ($p) => ($p['ativo'] ?? false) === true));
-
-    // Dados públicos: o CPF e o status interno nunca saem pela API
-    return array_map(function ($p) {
-        unset($p['cpf'], $p['ativo']);
-        $p['foto'] = asset($p['foto']);
-        return $p;
-    }, $ativos);
+    return Professor::query()
+        ->where('ativo', true)
+        ->orderBy('nome')
+        ->get()
+        ->map(fn (Professor $professor): array => [
+            'id' => $professor->id,
+            'nome' => $professor->nome,
+            'profissao' => $professor->profissao,
+            'modalidade' => $professor->modalidade,
+            'especialidades' => $professor->especialidades ?? [],
+            'biografia' => $professor->biografia,
+            'horario_trabalho' => $professor->horario_trabalho,
+            'foto' => $professor->foto_url,
+        ])
+        ->all();
 }
 
 public function professores()

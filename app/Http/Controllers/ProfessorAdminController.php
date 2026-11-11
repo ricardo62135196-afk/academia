@@ -3,22 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfessorRequest;
-use App\Support\ProfessorRepository;
+use App\Models\Professor;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use RuntimeException;
 
 class ProfessorAdminController extends Controller
 {
-    public function __construct(private readonly ProfessorRepository $professores) {}
-
     public function index(): View
     {
-        $professores = collect($this->professores->all())
-            ->sortBy(fn (array $professor): string => Str::lower(Str::ascii($professor['nome'])))
-            ->values()
-            ->all();
+        $professores = Professor::query()
+            ->orderBy('nome')
+            ->get();
 
         return view('admin.professores.index', ['professores' => $professores]);
     }
@@ -32,67 +31,59 @@ class ProfessorAdminController extends Controller
     {
         $dados = $this->dadosDoProfessor($request);
         $dados['foto'] = $request->hasFile('foto')
-            ? $this->salvarFoto($request->file('foto'), $dados['nome'])
+            ? $this->salvarFoto($request->file('foto'))
             : config('academia.foto_padrao');
         $dados['ativo'] = $request->boolean('ativo');
 
-        $professor = $this->professores->create($dados);
+        $professor = Professor::query()->create($dados);
 
         return redirect()
             ->route('admin.professores.index')
-            ->with('sucesso', "Professor {$professor['nome']} cadastrado com sucesso.");
+            ->with('sucesso', "Professor {$professor->nome} cadastrado com sucesso.");
     }
 
     public function edit(int $id): View
     {
-        return view('admin.professores.form', ['professor' => $this->professorOuErro404($id)]);
+        return view('admin.professores.form', [
+            'professor' => Professor::query()->findOrFail($id),
+        ]);
     }
 
     public function update(ProfessorRequest $request, int $id): RedirectResponse
     {
-        $atual = $this->professorOuErro404($id);
-
+        $professor = Professor::query()->findOrFail($id);
+        $fotoAnterior = $professor->foto;
         $dados = $this->dadosDoProfessor($request);
-        $dados['foto'] = $atual['foto'];
 
         if ($request->hasFile('foto')) {
-            $this->apagarFoto($atual['foto']);
-            $dados['foto'] = $this->salvarFoto($request->file('foto'), $dados['nome']);
+            $dados['foto'] = $this->salvarFoto($request->file('foto'));
         } elseif ($request->boolean('remover_foto')) {
-            $this->apagarFoto($atual['foto']);
             $dados['foto'] = config('academia.foto_padrao');
         }
 
         $dados['ativo'] = $request->boolean('ativo');
+        $professor->update($dados);
 
-        $this->professores->update($id, $dados);
+        if (isset($dados['foto']) && $dados['foto'] !== $fotoAnterior) {
+            $this->apagarFoto($fotoAnterior);
+        }
 
         return redirect()
             ->route('admin.professores.index')
-            ->with('sucesso', "Professor {$dados['nome']} atualizado com sucesso.");
+            ->with('sucesso', "Professor {$professor->nome} atualizado com sucesso.");
     }
 
     public function destroy(int $id): RedirectResponse
     {
-        $removido = $this->professores->delete($id);
-
-        if ($removido === null) {
-            abort(404);
-        }
-
-        $this->apagarFoto($removido['foto']);
+        $professor = Professor::query()->findOrFail($id);
+        $nome = $professor->nome;
+        $foto = $professor->foto;
+        $professor->delete();
+        $this->apagarFoto($foto);
 
         return redirect()
             ->route('admin.professores.index')
-            ->with('sucesso', "Professor {$removido['nome']} excluído.");
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    private function professorOuErro404(int $id): array
-    {
-        return $this->professores->find($id) ?? abort(404);
+            ->with('sucesso', "Professor {$nome} excluído.");
     }
 
     /**
@@ -104,6 +95,9 @@ class ProfessorAdminController extends Controller
 
         return [
             'nome' => $validado['nome'],
+            'profissao' => $validado['profissao'] ?? null,
+            'email' => $validado['email'] ?? null,
+            'telefone' => $validado['telefone'] ?? null,
             'cpf' => $validado['cpf'],
             'modalidade' => $validado['modalidade'],
             'especialidades' => $validado['especialidades'],
@@ -112,25 +106,27 @@ class ProfessorAdminController extends Controller
         ];
     }
 
-    private function salvarFoto(UploadedFile $arquivo, string $nome): string
+    private function salvarFoto(UploadedFile $arquivo): string
     {
-        $nomeDoArquivo = Str::slug($nome).'-'.Str::lower(Str::random(6)).'.'.$arquivo->guessExtension();
+        $caminho = $arquivo->storePublicly('professores', 'public');
 
-        $arquivo->move(config('academia.fotos_diretorio'), $nomeDoArquivo);
+        if ($caminho === false) {
+            throw new RuntimeException('Não foi possível salvar a foto do professor.');
+        }
 
-        return config('academia.fotos_url_base').'/'.$nomeDoArquivo;
+        return $caminho;
     }
 
-    private function apagarFoto(string $caminho): void
+    private function apagarFoto(?string $caminho): void
     {
-        if ($caminho === config('academia.foto_padrao')) {
+        if ($caminho === null || ! Str::startsWith($caminho, 'professores/')) {
             return;
         }
 
-        $arquivo = config('academia.fotos_diretorio').DIRECTORY_SEPARATOR.basename($caminho);
+        $disco = Storage::disk('public');
 
-        if (is_file($arquivo)) {
-            unlink($arquivo);
+        if ($disco->exists($caminho) && ! $disco->delete($caminho)) {
+            throw new RuntimeException('Não foi possível remover a foto anterior do professor.');
         }
     }
 }
