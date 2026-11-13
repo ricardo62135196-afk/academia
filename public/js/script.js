@@ -42,10 +42,6 @@
       });
     }
 
-    // Login continua simulado; o cadastro usa o endpoint do servidor.
-    document.querySelectorAll('form[data-next]').forEach(f =>
-      f.addEventListener('submit', e => { e.preventDefault(); location.href = f.dataset.next; }));
-
     const abas = document.querySelectorAll('[data-aba]');
     if (abas.length) {
       const p = new URLSearchParams(location.search);

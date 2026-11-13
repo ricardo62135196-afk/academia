@@ -11,6 +11,12 @@ $menu = ['principal' => 'Principal', 'modalidades' => 'Modalidades', 'professore
         <a href="{{ url('/' . $rota) }}" @if (request()->is($rota, $rota . '/*')) aria-current="page" @endif>{{ $nome }}</a>
       @endforeach
     </nav>
+    @auth
+      <form method="POST" action="{{ route('logout') }}">
+        @csrf
+        <button class="btn ciano" type="submit">Sair</button>
+      </form>
+    @endauth
   </aside>
   <main class="conteudo">
     <div class="barra">

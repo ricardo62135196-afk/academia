@@ -7,10 +7,14 @@ use App\Http\Controllers\ContatoController;
 use App\Http\Controllers\AgendamentoController;
 use App\Http\Controllers\ProfessorAdminController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\LoginController;
 
 Route::get('/alunos', [AlunosController::class, 'index'])->name('alunos.index');
 Route::post('/alunos', [AlunosController::class, 'store'])->name('alunos.store');
 Route::post('/cadastro', [RegisterController::class, 'store'])->name('cadastro.store');
+Route::post('/logout', LogoutController::class)->middleware('auth')->name('logout');
+Route::post('/login', LoginController::class)->middleware('throttle:6,1')->name('login.store');
 Route::redirect('/professores/cadastrar', '/admin/professores')->name('professores.create');
 
 Route::view('/', 'inicio');
