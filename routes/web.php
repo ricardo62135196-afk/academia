@@ -6,9 +6,11 @@ use App\Http\Controllers\AlunosController;
 use App\Http\Controllers\ContatoController;
 use App\Http\Controllers\AgendamentoController;
 use App\Http\Controllers\ProfessorAdminController;
+use App\Http\Controllers\RegisterController;
 
 Route::get('/alunos', [AlunosController::class, 'index'])->name('alunos.index');
 Route::post('/alunos', [AlunosController::class, 'store'])->name('alunos.store');
+Route::post('/cadastro', [RegisterController::class, 'store'])->name('cadastro.store');
 Route::redirect('/professores/cadastrar', '/admin/professores')->name('professores.create');
 
 Route::view('/', 'inicio');

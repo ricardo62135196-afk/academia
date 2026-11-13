@@ -66,6 +66,20 @@
                 <p class="erro-campo">{{ $message }}</p>
             @enderror
 
+            <label for="password">Senha</label>
+            <input
+                type="password"
+                name="password"
+                id="password"
+                minlength="8"
+                maxlength="255"
+                autocomplete="new-password"
+                required
+            >
+            @error('password')
+                <p class="erro-campo">{{ $message }}</p>
+            @enderror
+
             <button class="btn cheio" type="submit">Cadastrar aluno</button>
         </form>
     </section>

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class AlunosController extends Controller
 {
@@ -20,11 +21,19 @@ class AlunosController extends Controller
             'nome' => 'required|string|max:100',
             'email' => 'required|email|max:30',
             'telefone' => 'required|string|max:20',
+            'password' => 'required|string|min:8|max:255',
         ]);
 
         DB::insert(
-            'INSERT INTO alunos (nome, email, telefone) VALUES (?, ?, ?)',
-            [$dados['nome'], $dados['email'], $dados['telefone']]
+            'INSERT INTO alunos (nome, email, telefone, password, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)',
+            [
+                $dados['nome'],
+                $dados['email'],
+                $dados['telefone'],
+                Hash::make($dados['password']),
+                now(),
+                now(),
+            ]
         );
 
         return redirect()

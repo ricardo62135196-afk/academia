@@ -42,7 +42,7 @@
       });
     }
 
-    // Login e cadastro: segue para a página principal (sem back-end por enquanto)
+    // Login continua simulado; o cadastro usa o endpoint do servidor.
     document.querySelectorAll('form[data-next]').forEach(f =>
       f.addEventListener('submit', e => { e.preventDefault(); location.href = f.dataset.next; }));
 
